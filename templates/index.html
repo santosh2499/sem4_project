@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="hero-section bg-primary text-white p-5 rounded-3 mb-5 shadow">
+            <h1 class="display-4 mb-4">Smart Expense Manager</h1>
+            <p class="lead">Track, Analyze, and Optimize Your Expenses</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-lg hover-effect">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="bi bi-plus-circle fs-1"></i></h5>
+                        <a href="{{ url_for('add_expense') }}" class="stretched-link btn btn-success btn-lg">
+                            Add New Expense
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 shadow-lg hover-effect">
+                    <div class="card-body text-center">
+                        <h5 class="card-title"><i class="bi bi-graph-up fs-1"></i></h5>
+                        <a href="{{ url_for('dashboard') }}" class="stretched-link btn btn-info btn-lg">
+                            View Dashboard
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-stats mt-5">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card stat-card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">Monthly Budget</h5>
+                            <h2 class="text-primary">₹25,000</h2>
+                            <div class="progress mt-2">
+                                <div class="progress-bar bg-warning" style="width: 65%">65%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more quick stats as needed -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
