@@ -15,7 +15,7 @@
                         <select class="form-select" name="category" required>
                             <option value="">Select Category</option>
                             {% for cat in category_mapping.values() | unique %}
-                            <option value="{{ cat }}">{{ cat }}</option>
+                                <option value="{{ cat }}">{{ cat }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -48,13 +48,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for budget in budgets %}
-                            <tr class="{% if budget.spent >= budget.amount %}table-danger{% elif budget.spent >= budget.amount*0.9 %}table-warning{% endif %}">
-                                <td>{{ budget.category }}</td>
-                                <td>₹{{ budget.amount }}</td>
-                                <td>₹{{ budget.spent }}</td>
-                            </tr>
-                            {% endfor %}
+                            {% if budgets %}
+                                {% for budget in budgets %}
+                                <tr class="{% if budget.spent and budget.amount and budget.spent >= budget.amount %}table-danger
+                                           {% elif budget.spent and budget.amount and budget.spent >= budget.amount * 0.9 %}table-warning
+                                           {% endif %}">
+                                    <td>{{ budget.category }}</td>
+                                    <td>₹{{ budget.amount }}</td>
+                                    <td>₹{{ budget.spent }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No budget set yet</td>
+                                </tr>
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
