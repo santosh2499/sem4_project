@@ -4,6 +4,7 @@ from datetime import datetime
 import pickle
 from flask import Flask, render_template, request, redirect, flash, url_for
 import joblib
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # Required for flashing messages
@@ -180,5 +181,6 @@ def check_alerts():
     return render_template('alerts.html', alerts=alerts)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))  # Use Render's PORT env variable
+    app.run(host="0.0.0.0", port=port)
