@@ -154,22 +154,16 @@ def set_budget():
 
     return render_template('set_budget.html', budgets=budgets, category_mapping=category_mapping)
 
+# 🛠 Route for Detailed Transactions with Pagination
 @app.route('/detailed_transactions')
 def detailed_transactions():
     db = get_db()
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM expenses ORDER BY timestamp DESC")
+    cursor.execute("SELECT timestamp, description, category, price FROM expenses ORDER BY timestamp DESC")
     transactions = cursor.fetchall()
+    db.close()
+
     return render_template('detailed_transactions.html', transactions=transactions)
-
-
-@app.route('/category_summary')
-def category_summary():
-    db = get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT category, SUM(price) FROM expenses GROUP BY category")
-    summary = cursor.fetchall()
-    return render_template('category_summary.html', summary=summary)
 
 
 @app.route('/alerts')
@@ -194,23 +188,45 @@ def check_alerts():
     return render_template('alerts.html', alerts=alerts)
 
 
+@app.route('/category_summary')
+def category_summary():
+    conn = sqlite3.connect("expenses.db")
+    cursor = conn.cursor()
+
+    # Fetch total expenses per category
+    cursor.execute("SELECT category, SUM(price) FROM expenses GROUP BY category ORDER BY SUM(price) DESC")
+    summary_data = cursor.fetchall()
+    conn.close()
+
+    # Ensure data is properly structured
+    category_names = [row[0] for row in summary_data] if summary_data else []
+    category_totals = [row[1] for row in summary_data] if summary_data else []
+
+    return render_template("category_summary.html",
+                           summary_data=summary_data,
+                           category_names=category_names,
+                           category_totals=category_totals)
 
 
-# Detailed Transactions for a Specific Category
 @app.route('/category/<category>')
 def category_transactions(category):
     conn = sqlite3.connect("expenses.db")
     cursor = conn.cursor()
 
     # Fetch transactions for the selected category
-    cursor.execute("SELECT description, price, timestamp FROM expenses WHERE category = ? ORDER BY timestamp DESC",
-                   (category,))
+    cursor.execute("SELECT description, price, timestamp FROM expenses WHERE category = ? ORDER BY timestamp DESC", (category,))
     transactions = cursor.fetchall()
 
+    # Calculate total spent in this category
+    cursor.execute("SELECT SUM(price) FROM expenses WHERE category = ?", (category,))
+    total_spent = cursor.fetchone()[0] or 0  # Handle None case
+
     conn.close()
-    return render_template("category_transactions.html", category=category, transactions=transactions)
 
-
+    return render_template("category_transactions.html",
+                           category=category,
+                           transactions=transactions,
+                           total_spent=total_spent)
 
 
 if __name__ == "__main__":

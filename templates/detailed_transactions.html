@@ -15,30 +15,25 @@
                         <th>Description</th>
                         <th>Category</th>
                         <th>Amount</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for transaction in transactions %}
                     <tr>
-                        <td>{{ transaction.timestamp.strftime('%d %b %Y') }}</td>
-                        <td>{{ transaction.description }}</td>
+                        <td>{{ transaction["timestamp"] }}</td>
+                        <td>{{ transaction["description"] }}</td>
                         <td>
                             <span class="badge bg-primary rounded-pill">
-                                {{ transaction.category }}
+                                {{ transaction["category"] }}
                             </span>
                         </td>
-                        <td class="fw-bold">₹{{ transaction.price }}</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-info">Edit</button>
-                            <button class="btn btn-sm btn-outline-danger">Delete</button>
-                        </td>
+                        <td class="fw-bold">₹{{ transaction["price"] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
-        
+
         <nav aria-label="Transaction pagination">
             <ul class="pagination justify-content-center">
                 <li class="page-item disabled">

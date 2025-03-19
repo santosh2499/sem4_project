@@ -22,7 +22,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Add more stats if needed -->
         </div>
 
         <div class="table-responsive">
@@ -37,9 +36,9 @@
                 <tbody>
                     {% for transaction in transactions %}
                     <tr>
-                        <td>{{ transaction.timestamp.strftime('%d %b') }}</td>
-                        <td>{{ transaction.description }}</td>
-                        <td class="fw-bold">₹{{ transaction.price }}</td>
+                        <td>{{ transaction[2] }}</td>  <!-- Timestamp -->
+                        <td>{{ transaction[0] }}</td>  <!-- Description -->
+                        <td class="fw-bold">₹{{ transaction[1] }}</td>  <!-- Price -->
                     </tr>
                     {% endfor %}
                 </tbody>
